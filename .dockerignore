@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Python cache & artifacts
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Environment variables (Безопасность: не запекаем секреты в образ!)
+.env
+.env.local
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+
+# Project specific
+screenshots/
+README.md
+docker-compose.yml
