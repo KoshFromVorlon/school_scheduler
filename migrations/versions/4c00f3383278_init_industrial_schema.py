@@ -1,8 +1,8 @@
-"""Create initial tables
+"""Init Industrial Schema
 
-Revision ID: 918d0be6683a
+Revision ID: 4c00f3383278
 Revises: 
-Create Date: 2026-02-06 13:51:39.749015
+Create Date: 2026-02-06 14:40:22.720051
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '918d0be6683a'
+revision = '4c00f3383278'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,7 +27,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('capacity', sa.Integer(), nullable=False),
-    sa.Column('is_lab', sa.Boolean(), nullable=False),
+    sa.Column('room_type', sa.Enum('STANDARD', 'LAB_PHYSICS', 'LAB_CHEMISTRY', 'LAB_BIO', 'GYM', 'IT_LAB', name='roomtype'), nullable=False),
     sa.Column('school_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -36,6 +36,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('size', sa.Integer(), nullable=False),
+    sa.Column('shift', sa.Integer(), nullable=False),
     sa.Column('school_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -59,6 +60,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('day_of_week', sa.Integer(), nullable=False),
     sa.Column('period_number', sa.Integer(), nullable=False),
+    sa.Column('shift_number', sa.Integer(), nullable=False),
     sa.Column('school_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -70,6 +72,8 @@ def upgrade():
     sa.Column('subject_id', sa.Integer(), nullable=False),
     sa.Column('group_id', sa.Integer(), nullable=False),
     sa.Column('school_id', sa.Integer(), nullable=False),
+    sa.Column('subgroup', sa.Enum('WHOLE_CLASS', 'GROUP_1', 'GROUP_2', 'BOYS', 'GIRLS', name='subgrouptype'), nullable=False),
+    sa.Column('required_room_type', sa.Enum('STANDARD', 'LAB_PHYSICS', 'LAB_CHEMISTRY', 'LAB_BIO', 'GYM', 'IT_LAB', name='roomtype'), nullable=False),
     sa.ForeignKeyConstraint(['group_id'], ['student_groups.id'], ),
     sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
     sa.ForeignKeyConstraint(['subject_id'], ['subjects.id'], ),

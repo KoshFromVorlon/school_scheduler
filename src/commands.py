@@ -1,101 +1,273 @@
 import click
+import random
 from flask.cli import with_appcontext
 from src.extensions import db
-from src.models.school import School, Teacher, Room, Subject
-from src.models.schedule import StudentGroup, Workload, TimeSlot
+from src.models.school import School, Room, Teacher, Subject
+from src.models.schedule import StudentGroup, TimeSlot, Workload
+from src.models.enums import RoomType, SubgroupType
 
 
 @click.command('seed_db')
 @with_appcontext
 def seed_db_command():
-    """Заполняет базу тестовыми данными."""
-    print("🌱 Начинаем посев данных (Seeding)...")
+    """Генерация реальных данных Софиевско-Борщаговского лицея."""
 
-    # Проверка на наличие данных, чтобы не дублировать
-    if School.query.first():
-        print("⚠️ Данные уже существуют. Пропуск.")
-        return
+    print("🧹 Очистка старой базы...")
+    db.drop_all()
+    db.create_all()
 
-    # 1. Создаем Школу
-    school = School(name="Lyceum #1")
+    # 1. ШКОЛА
+    school = School(name='Софіївсько-Борщагівський ліцей')
     db.session.add(school)
-    db.session.commit()  # Коммит, чтобы получить ID школы
+    db.session.flush()  # Получаем ID
 
-    # 2. Создаем Кабинеты
-    rooms = [
-        Room(name="101 (Math)", capacity=30, school_id=school.id),
-        Room(name="102 (History)", capacity=30, school_id=school.id),
-        Room(name="201 (Physics Lab)", is_lab=True, capacity=20, school_id=school.id),
-        Room(name="202 (Bio Lab)", is_lab=True, capacity=20, school_id=school.id),
-        Room(name="Gym", capacity=50, school_id=school.id),
-    ]
+    # 2. КАБИНЕТЫ (Реалистичный набор)
+    print("🏗 Строим кабинеты...")
+    rooms = []
+    # Обычные классы
+    for i in range(101, 115): rooms.append(Room(name=f"{i}", school_id=school.id))
+    for i in range(201, 215): rooms.append(Room(name=f"{i}", school_id=school.id))
+    # Спец. кабинеты
+    rooms.extend([
+        Room(name="Спортзал 1 (Великий)", room_type=RoomType.GYM, capacity=60, school_id=school.id),
+        Room(name="Спортзал 2 (Малий)", room_type=RoomType.GYM, capacity=30, school_id=school.id),
+        Room(name="205 (Хімія)", room_type=RoomType.LAB_CHEMISTRY, school_id=school.id),
+        Room(name="206 (Фізика)", room_type=RoomType.LAB_PHYSICS, school_id=school.id),
+        Room(name="207 (Біологія)", room_type=RoomType.LAB_BIO, school_id=school.id),
+        Room(name="301 (Інформатика)", room_type=RoomType.IT_LAB, capacity=15, school_id=school.id),
+        Room(name="302 (Інформатика)", room_type=RoomType.IT_LAB, capacity=15, school_id=school.id),
+        Room(name="Актова зала", school_id=school.id),
+        Room(name="Майстерня", school_id=school.id)
+    ])
     db.session.add_all(rooms)
+    db.session.flush()
 
-    # 3. Создаем Учителей
-    teachers = [
-        Teacher(name="Mr. Anderson (Math)", school_id=school.id),
-        Teacher(name="Mrs. Smith (History)", school_id=school.id),
-        Teacher(name="Dr. House (Biology)", school_id=school.id),
-        Teacher(name="Mr. White (Chemistry)", school_id=school.id),
-        Teacher(name="Coach Carter (PE)", school_id=school.id),
+    # 3. УЧИТЕЛЯ (Из твоего PDF)
+    print("👨‍🏫 Нанимаем учителей...")
+    # Словарь: ФИО -> Основной предмет (для генерации нагрузки)
+    teachers_map = {
+        "Амшарюк Тетяна": "Англ. мова",
+        "Андрущенко Лариса": "Англ. мова",
+        "Вербіцька Оксана": "Англ. мова",
+        "Воробйов Єгор": "Англ. мова",
+        "Глухова Наталія": "Англ. мова",
+        "Константінова Любов": "Англ. мова",
+        "Назарчук Тетяна": "Англ. мова",
+        "Печенюк Зоряна": "Англ. мова",
+        "Тетерчук Олена": "Англ. мова",
+        "Бандура Тетяна": "Англ. мова",
+        "Степанович Катерина": "Англ. мова",
+        "Кучер Тетяна": "Англ. мова",
+        "Огиренко Наталія": "Англ. мова",
+        "Ткаченко Олександр": "Англ. мова",
+        "Луценко Наталія": "Англ. мова",
+        "Тєрєхова Анастасія": "Англ. мова",
+        "Сидоренко Катерина": "Англ. мова",
+        "Бовкун Наталія": "Англ. мова",
+        "Оленська Альона": "Англ. мова",
+        "Антонюк Юлія": "Англ. мова",
+        "Денисенко Тамара": "Франц. мова",  # Ведет и англ, но дадим второй язык
+        "Іщенко Анна": "Англ. мова",
+        "Сербін Ліна": "Англ. мова",
+        "Соловйова Катерина": "Англ. мова",
+        "Савіцька Марта": "Нім. мова",
+        "Дзеціна Світлана": "Нім. мова",
+        "Олійник Наталія": "Нім. мова",
+        "Бондаренко Галина": "Укр. мова",
+        "Горбунова Галина": "Укр. мова",
+        "Камбур Оксана": "Укр. мова",
+        "Кучмій Світлана": "Укр. мова",
+        "Лутюк Катерина": "Укр. мова",
+        "Мамзіна Олена": "Укр. мова",
+        "Мацкевич Олена": "Укр. літ.",
+        "Харенко Ніна": "Укр. мова",
+        "Шевчук Валентина": "Укр. мова",
+        "Клопот Євгенія": "Укр. мова",
+        "Блажеєва Юлія": "Укр. мова",
+        "Каленюк Наталія": "Укр. мова",
+        "Музиленко Оксана": "Укр. мова",
+        "Колоб'юк Марина": "Укр. мова",
+        "Лопаткіна Оксана": "Укр. літ.",
+        "Петренко Інна": "Зар. літ.",
+        "Комарова Галина": "Зар. літ.",
+        "Куліш Вікторія": "Драм. і театр",
+        "Дрелинська Олена": "Математика",
+        "Тищенко Наталія": "Математика"
+        # Можно добавить остальных вручную или дать алгоритму распределить
+    }
+
+    db_teachers = {}
+    for name in teachers_map.keys():
+        t = Teacher(name=name, school_id=school.id)
+        db.session.add(t)
+        db_teachers[name] = t
+
+    # Добавим универсалов для физры и других предметов, если их нет в списке
+    extra_teachers = ["Гончар Василь", "Коваль Ігор", "Шевченко Ірина", "Бойко Олег"]
+    for name in extra_teachers:
+        t = Teacher(name=name, school_id=school.id)
+        db.session.add(t)
+        db_teachers[name] = t
+
+    db.session.flush()
+
+    # 4. ПРЕДМЕТЫ
+    print("📚 Утверждаем учебный план...")
+    subjects_list = [
+        "Англ. мова", "Нім. мова", "Франц. мова", "Пол. мова",
+        "Укр. мова", "Укр. літ.", "Зар. літ.",
+        "Історія України", "Всесвітня історія", "Правознавство",
+        "Математика", "Алгебра", "Геометрія",
+        "Інформатика", "Фізика", "Астрономія", "Хімія", "Біологія",
+        "Географія", "Природознавство", "Я досліджую світ",
+        "Основи здоров'я", "Фізична культура",
+        "Мистецтво", "Музичне мистецтво", "Образотворче мистецтво",
+        "Технології", "Захист України", "Громадянська освіта",
+        "Драм. і театр", "Хореографія", "STEM"
     ]
-    db.session.add_all(teachers)
-    db.session.commit()
+    db_subjects = {}
+    for s_name in subjects_list:
+        s = Subject(name=s_name, school_id=school.id)
+        db.session.add(s)
+        db_subjects[s_name] = s
+    db.session.flush()
 
-    # 4. Предметы
-    subjects = [
-        Subject(name="Mathematics", school_id=school.id),
-        Subject(name="History", school_id=school.id),
-        Subject(name="Biology", school_id=school.id),
-        Subject(name="Chemistry", school_id=school.id),
-        Subject(name="PE", school_id=school.id),
-    ]
-    db.session.add_all(subjects)
-    db.session.commit()
+    # 5. КЛАССЫ (С 1 по 11, параллели А, Б, В, Г)
+    print("🎓 Формируем классы...")
+    classes = []
+    letters = ['А', 'Б', 'В', 'Г']
+    db_groups = []
 
-    # 5. Классы
-    groups = [
-        StudentGroup(name="10-A", school_id=school.id),
-        StudentGroup(name="10-B", school_id=school.id),
-    ]
-    db.session.add_all(groups)
-    db.session.commit()
+    # Младшая школа (1-4) - 1 смена
+    for grade in range(1, 5):
+        for let in letters:
+            g = StudentGroup(name=f"{grade}-{let}", size=30, shift=1, school_id=school.id)
+            db.session.add(g)
+            db_groups.append(g)
 
-    # 6. Временные слоты (Пн-Пт, по 5 уроков)
-    slots = []
-    for day in range(1, 6):  # 1=Monday
-        for period in range(1, 6):  # 1=First lesson
-            slots.append(TimeSlot(day_of_week=day, period_number=period, school_id=school.id))
-    db.session.add_all(slots)
-    db.session.commit()
+    # Средняя школа (5-8) - смешанные смены (пусть 5,6 - 1 смена, 7,8 - 2 смена для интереса)
+    for grade in range(5, 9):
+        shift = 1 if grade < 7 else 2
+        for let in letters:
+            g = StudentGroup(name=f"{grade}-{let}", size=30, shift=shift, school_id=school.id)
+            db.session.add(g)
+            db_groups.append(g)
 
-    # 7. Нагрузка (Кто что ведет)
-    # Нужно получить объекты из базы, чтобы взять их ID
-    math_subj = subjects[0]
-    hist_subj = subjects[1]
-    math_teacher = teachers[0]
-    hist_teacher = teachers[1]
-    group_a = groups[0]
-    group_b = groups[1]
+    # Старшая школа (9-11) - 1 смена
+    for grade in range(9, 12):
+        for let in letters[:3]:  # Меньше классов
+            g = StudentGroup(name=f"{grade}-{let}", size=25, shift=1, school_id=school.id)
+            db.session.add(g)
+            db_groups.append(g)
 
-    workloads = [
-        # 10-A Учит Математику (Mr. Anderson) - 5 часов
-        Workload(group_id=group_a.id, subject_id=math_subj.id, teacher_id=math_teacher.id, hours_per_week=5,
-                 school_id=school.id),
-        # 10-A Учит Историю - 3 часа
-        Workload(group_id=group_a.id, subject_id=hist_subj.id, teacher_id=hist_teacher.id, hours_per_week=3,
-                 school_id=school.id),
-        # 10-B Учит Математику (Тот же учитель!) - 5 часов
-        Workload(group_id=group_b.id, subject_id=math_subj.id, teacher_id=math_teacher.id, hours_per_week=5,
-                 school_id=school.id)
-    ]
+    db.session.flush()
 
-    db.session.add_all(workloads)
-    db.session.commit()
+    # 6. СЛОТЫ ВРЕМЕНИ (13 уроков)
+    print("⏰ Заводим будильники...")
+    for day in range(1, 6):
+        for i in range(1, 14):  # 13 уроков
+            # Смена 1: уроки 1-7 (или 1-8)
+            # Смена 2: уроки 6-13
+            # Мы просто помечаем их, логика в Solver
+            shift_num = 1 if i <= 7 else 2
+            # Слот "переходной" (6,7,8 урок) подходит всем, если правильно настроить
+            db.session.add(TimeSlot(day_of_week=day, period_number=i, shift_number=shift_num, school_id=school.id))
 
-    print(f"✅ Успешно создана школа '{school.name}' и тестовые данные.")
+    db.session.flush()
+
+    # 7. ГЕНЕРАЦИЯ НАГРУЗКИ (Самое сложное)
+    print("💼 Раздаем нагрузку (это займет время)...")
+
+    workloads = []
+
+    # Вспомогательная функция для поиска учителя по предмету
+    def get_teacher_for_subject(subj_name):
+        # 1. Ищем профильного
+        candidates = [t for name, main_subj in teachers_map.items() if main_subj == subj_name and name in db_teachers]
+        if candidates: return db_teachers[random.choice(candidates).name]
+        # 2. Если нет, берем универсала
+        return db_teachers[random.choice(extra_teachers)]
+
+    for group in db_groups:
+        grade = int(group.name.split('-')[0])
+
+        # План обучения (упрощенный, но реалистичный)
+        curriculum = {}
+
+        if grade <= 4:  # Начальная школа
+            curriculum = {
+                "Укр. мова": 4, "Математика": 4, "Англ. мова": 3,
+                "Я досліджую світ": 2, "Фізична культура": 3, "Мистецтво": 2, "Інформатика": 1
+            }
+        elif grade <= 9:  # Средняя
+            curriculum = {
+                "Укр. мова": 3, "Укр. літ.": 2, "Англ. мова": 3, "Математика": 4,
+                "Історія України": 2, "Фізична культура": 3, "Географія": 2, "Біологія": 2,
+                "Фізика": 2, "Хімія": 2, "Інформатика": 2, "Технології": 1
+            }
+        else:  # Старшая
+            curriculum = {
+                "Укр. мова": 2, "Укр. літ.": 2, "Англ. мова": 3, "Алгебра": 3, "Геометрія": 2,
+                "Історія України": 2, "Всесвітня історія": 1, "Фізична культура": 2,
+                "Фізика": 3, "Хімія": 2, "Біологія": 2, "Інформатика": 2, "Захист України": 2
+            }
+
+        for subj_name, hours in curriculum.items():
+            if subj_name not in db_subjects: continue  # Пропуск если опечатка
+
+            subject = db_subjects[subj_name]
+            teacher = get_teacher_for_subject(subj_name)
+
+            # Определение спец. кабинета
+            req_room = RoomType.STANDARD
+            if "Фізична" in subj_name:
+                req_room = RoomType.GYM
+            elif "Інформатика" in subj_name:
+                req_room = RoomType.IT_LAB
+            elif "Хімія" in subj_name:
+                req_room = RoomType.LAB_CHEMISTRY
+            elif "Фізика" in subj_name:
+                req_room = RoomType.LAB_PHYSICS
+            elif "Біологія" in subj_name:
+                req_room = RoomType.LAB_BIO
+
+            # ДЕЛЕНИЕ НА ГРУППЫ (Англ, Информатика, Физра - иногда)
+            if subj_name in ["Англ. мова", "Інформатика", "Нім. мова"] and grade > 4:
+                # Группа 1
+                t1 = teacher
+                w1 = Workload(
+                    school_id=school.id, teacher_id=t1.id, subject_id=subject.id, group_id=group.id,
+                    hours_per_week=hours, subgroup=SubgroupType.GROUP_1, required_room_type=req_room
+                )
+                # Группа 2 (берем другого учителя, если есть)
+                t2 = get_teacher_for_subject(subj_name)
+                # Если учителей мало, может быть тот же, но в идеале другой
+                if t2.id == t1.id and len(teachers_map) > 10:
+                    # Попытка найти другого
+                    pass
+
+                w2 = Workload(
+                    school_id=school.id, teacher_id=t2.id, subject_id=subject.id, group_id=group.id,
+                    hours_per_week=hours, subgroup=SubgroupType.GROUP_2, required_room_type=req_room
+                )
+                workloads.extend([w1, w2])
+            else:
+                # Весь класс
+                w = Workload(
+                    school_id=school.id, teacher_id=teacher.id, subject_id=subject.id, group_id=group.id,
+                    hours_per_week=hours, subgroup=SubgroupType.WHOLE_CLASS, required_room_type=req_room
+                )
+                workloads.append(w)
+
+    print(f"💾 Сохраняем {len(workloads)} записей нагрузки...")
+    # Сохраняем пачками, чтобы не зависло
+    batch_size = 100
+    for i in range(0, len(workloads), batch_size):
+        db.session.add_all(workloads[i:i + batch_size])
+        db.session.commit()  # Коммитим по частям
+
+    print("✅ УСПЕШНО! Реальные данные лицея загружены.")
 
 
 def register_commands(app):
-    """Регистрирует команды в приложении."""
     app.cli.add_command(seed_db_command)
