@@ -1,4 +1,6 @@
 from ortools.sat.python import cp_model
+from src.extensions import db
+from src.models.schedule import ScheduleEntry
 
 
 class SchoolScheduler:
@@ -12,12 +14,9 @@ class SchoolScheduler:
 
     def run_algorithm(self, workloads, slots, rooms):
         """
-        :param workloads: QuerySet или список Workload
-        :param slots: QuerySet или список TimeSlot
-        :param rooms: QuerySet или список Room
-        :return: Список словарей с решением или None
+        Запускает алгоритм и, если решение найдено, сохраняет его в БД.
+        :return: True если успешно, False если решение не найдено.
         """
-
         # === 1. Создание переменных ===
         # x[workload, slot, room] = 1 (если урок проводится), иначе 0
         for w in workloads:
@@ -37,7 +36,6 @@ class SchoolScheduler:
             self.model.Add(sum(lessons) == w.hours_per_week)
 
         # Б. Учитель не может вести два урока одновременно
-        # Сначала сгруппируем нагрузки по учителям
         teacher_workloads = {}
         for w in workloads:
             if w.teacher_id not in teacher_workloads:
@@ -45,12 +43,11 @@ class SchoolScheduler:
             teacher_workloads[w.teacher_id].append(w)
 
         for t_id, t_workloads in teacher_workloads.items():
-            for s in slots:  # Для каждого слота времени
+            for s in slots:
                 concurrent_lessons = []
                 for w in t_workloads:
-                    for r in rooms:  # Во всех кабинетах
+                    for r in rooms:
                         concurrent_lessons.append(self.grid[(w.id, s.id, r.id)])
-                # Сумма уроков учителя в этот слот времени <= 1
                 self.model.Add(sum(concurrent_lessons) <= 1)
 
         # В. Один кабинет - один урок в одно время
@@ -76,22 +73,36 @@ class SchoolScheduler:
                         concurrent_lessons.append(self.grid[(w.id, s.id, r.id)])
                 self.model.Add(sum(concurrent_lessons) <= 1)
 
-        # === 3. Решение ===
+        # === 3. Решение и Сохранение ===
         status = self.solver.Solve(self.model)
 
         if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-            return self._format_solution(workloads, slots, rooms)
-        return None
+            print("💾 Решение найдено! Сохраняем расписание в базу данных...")
+            self._save_to_db(workloads, slots, rooms)
+            return True
+        else:
+            print("💥 Невозможно составить расписание с такими ограничениями.")
+            return False
 
-    def _format_solution(self, workloads, slots, rooms):
-        results = []
+    def _save_to_db(self, workloads, slots, rooms):
+        """Сохраняет найденное решение в таблицу schedule_entries"""
+        # 1. Удаляем старое расписание (Пока удаляем всё, в будущем сделаем фильтр по школе)
+        db.session.query(ScheduleEntry).delete()
+
+        new_entries = []
         for w in workloads:
             for s in slots:
                 for r in rooms:
+                    # Если переменная равна 1 (True), значит здесь есть урок
                     if self.solver.Value(self.grid[(w.id, s.id, r.id)]):
-                        results.append({
-                            "workload": w,
-                            "slot": s,
-                            "room": r
-                        })
-        return results
+                        entry = ScheduleEntry(
+                            workload_id=w.id,
+                            timeslot_id=s.id,
+                            room_id=r.id
+                        )
+                        new_entries.append(entry)
+
+        # Массовое добавление записей (быстрее, чем по одной)
+        db.session.add_all(new_entries)
+        db.session.commit()
+        print(f"✅ Успешно сохранено {len(new_entries)} уроков.")

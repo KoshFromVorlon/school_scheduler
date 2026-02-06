@@ -18,51 +18,58 @@
 <body>
 <div class="container">
     <div class="schedule-card">
-        <h2 class="text-center mb-4">🗓 Расписание занятий</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="m-0">🗓 Расписание занятий</h2>
+            <form action="/generate" method="post">
+                <button type="submit" class="btn btn-primary">⚡ Пересоздать расписание</button>
+            </form>
+        </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th style="width: 5%">#</th>
-                        <th style="width: 19%">Понедельник</th>
-                        <th style="width: 19%">Вторник</th>
-                        <th style="width: 19%">Среда</th>
-                        <th style="width: 19%">Четверг</th>
-                        <th style="width: 19%">Пятница</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for period in range(1, 6) %}
-                    <tr>
-                        <td class="text-center fw-bold">{{ period }}</td>
-                        {% for day in range(1, 6) %}
-                        <td class="lesson-cell">
-                            {% set lessons = schedule_grid.get((day, period), []) %}
-
-                            {% if lessons %}
-                                {% for lesson in lessons %}
-                                <div class="border-bottom mb-1 pb-1">
-                                    <span class="badge bg-primary group-badge">{{ lesson.group }}</span>
-                                    <div class="subject">{{ lesson.subject }}</div>
-                                    <div class="teacher">{{ lesson.teacher }}</div>
-                                    <div class="room">📍 {{ lesson.room }}</div>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                                <span class="text-muted small">-</span>
-                            {% endif %}
-                        </td>
+        {% if empty %}
+            <div class="alert alert-warning text-center">
+                <h4>Расписание еще не создано</h4>
+                <p>Нажмите кнопку "Пересоздать расписание", чтобы запустить алгоритм.</p>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">#</th>
+                            <th style="width: 19%">Понедельник</th>
+                            <th style="width: 19%">Вторник</th>
+                            <th style="width: 19%">Среда</th>
+                            <th style="width: 19%">Четверг</th>
+                            <th style="width: 19%">Пятница</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for period in range(1, 6) %}
+                        <tr>
+                            <td class="text-center fw-bold">{{ period }}</td>
+                            {% for day in range(1, 6) %}
+                            <td class="lesson-cell">
+                                {% set lessons = schedule_grid.get((day, period), []) %}
+                                {% if lessons %}
+                                    {% for lesson in lessons %}
+                                    <div class="border-bottom mb-1 pb-1">
+                                        <span class="badge bg-primary group-badge">{{ lesson.group }}</span>
+                                        <div class="subject">{{ lesson.subject }}</div>
+                                        <div class="teacher">{{ lesson.teacher }}</div>
+                                        <div class="room">📍 {{ lesson.room }}</div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="text-muted small">-</span>
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
                         {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-3 text-center">
-            <a href="/schedule" class="btn btn-success">🔄 Обновить</a>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
 </div>
 </body>
