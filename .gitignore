@@ -1,0 +1,54 @@
+# --- Python (Байт-код и кэш) ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments (Виртуальные окружения) ---
+# Игнорируем все варианты названий папок с библиотеками
+venv/
+.venv/
+env/
+.env/
+venv.bak/
+
+# --- IDE (Настройки редактора) ---
+# PyCharm / IntelliJ IDEA (Твои личные настройки окон, цветов и т.д.)
+.idea/
+*.iml
+
+# VS Code (Если кто-то из команды пользуется им)
+.vscode/
+*.code-workspace
+
+# --- Environment Variables (Секреты) ---
+# САМОЕ ВАЖНОЕ: Никогда не отправляй пароли в GitHub!
+.env
+.env.local
+.env.*.local
+# Но пример файла с настройками можно оставить (если он есть)
+!.env.example
+
+# --- Database (Локальные файлы БД) ---
+*.sqlite3
+*.db
+
+# --- Testing & Coverage (Мусор от тестов) ---
+.coverage
+htmlcov/
+.pytest_cache/
+coverage.xml
+
+# --- Distribution / Builds (Папки сборки пакетов) ---
+build/
+dist/
+*.egg-info/
+wheels/
+
+# --- Docker ---
+# Если используешь docker-compose.override.yml для локальных настроек
+docker-compose.override.yml
+
+# --- OS System Files (Мусор от Windows и Mac) ---
+.DS_Store
+Thumbs.db
+Desktop.ini
