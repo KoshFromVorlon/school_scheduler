@@ -1,166 +1,166 @@
 Teacher,Subject,Class,Hours,MaxHours,Shift,Subgroup,RoomType
 Математика_Teach_1,Математика,1-А,4,12,1,whole,standard
-Укр. мова_Teach_1,Укр. мова,1-А,3,18,1,whole,standard
-Англ. мова_Teach_1,Англ. мова,1-А,3,18,1,1,standard
-Англ. мова_Teach_1,Англ. мова,1-А,3,18,1,2,standard
-Фізична культура_Teach_1,Фізична культура,1-А,3,25,1,whole,gym
-Математика_Teach_2,Математика,1-Б,4,25,1,whole,standard
+Укр. мова_Teach_1,Укр. мова,1-А,3,12,1,whole,standard
+Англ. мова_Teach_1,Англ. мова,1-А,3,25,1,1,standard
+Англ. мова_Teach_1,Англ. мова,1-А,3,25,1,2,standard
+Фізична культура_Teach_1,Фізична культура,1-А,3,18,1,whole,gym
+Математика_Teach_2,Математика,1-Б,4,12,1,whole,standard
 Укр. мова_Teach_2,Укр. мова,1-Б,3,18,1,whole,standard
-Англ. мова_Teach_2,Англ. мова,1-Б,3,12,1,1,standard
-Англ. мова_Teach_2,Англ. мова,1-Б,3,12,1,2,standard
-Фізична культура_Teach_2,Фізична культура,1-Б,3,18,1,whole,gym
-Математика_Teach_3,Математика,1-В,4,25,1,whole,standard
+Англ. мова_Teach_2,Англ. мова,1-Б,3,25,1,1,standard
+Англ. мова_Teach_2,Англ. мова,1-Б,3,25,1,2,standard
+Фізична культура_Teach_2,Фізична культура,1-Б,3,25,1,whole,gym
+Математика_Teach_3,Математика,1-В,4,18,1,whole,standard
 Укр. мова_Teach_3,Укр. мова,1-В,3,18,1,whole,standard
 Англ. мова_Teach_3,Англ. мова,1-В,3,18,1,1,standard
 Англ. мова_Teach_3,Англ. мова,1-В,3,18,1,2,standard
 Фізична культура_Teach_3,Фізична культура,1-В,3,18,1,whole,gym
 Математика_Teach_4,Математика,1-Г,4,18,1,whole,standard
-Укр. мова_Teach_4,Укр. мова,1-Г,3,12,1,whole,standard
+Укр. мова_Teach_4,Укр. мова,1-Г,3,25,1,whole,standard
 Англ. мова_Teach_4,Англ. мова,1-Г,3,25,1,1,standard
 Англ. мова_Teach_4,Англ. мова,1-Г,3,25,1,2,standard
-Фізична культура_Teach_4,Фізична культура,1-Г,3,25,1,whole,gym
-Математика_Teach_5,Математика,1-Д,4,12,1,whole,standard
-Укр. мова_Teach_5,Укр. мова,1-Д,3,18,1,whole,standard
+Фізична культура_Teach_4,Фізична культура,1-Г,3,18,1,whole,gym
+Математика_Teach_5,Математика,1-Д,4,25,1,whole,standard
+Укр. мова_Teach_5,Укр. мова,1-Д,3,12,1,whole,standard
 Англ. мова_Teach_5,Англ. мова,1-Д,3,12,1,1,standard
 Англ. мова_Teach_5,Англ. мова,1-Д,3,12,1,2,standard
 Фізична культура_Teach_5,Фізична культура,1-Д,3,12,1,whole,gym
-Математика_Teach_5,Математика,2-А,4,12,1,whole,standard
-Укр. мова_Teach_5,Укр. мова,2-А,3,18,1,whole,standard
+Математика_Teach_5,Математика,2-А,4,25,1,whole,standard
+Укр. мова_Teach_5,Укр. мова,2-А,3,12,1,whole,standard
 Англ. мова_Teach_5,Англ. мова,2-А,3,12,1,1,standard
 Англ. мова_Teach_5,Англ. мова,2-А,3,12,1,2,standard
 Фізична культура_Teach_5,Фізична культура,2-А,3,12,1,whole,gym
 Математика_Teach_4,Математика,2-Б,4,18,1,whole,standard
-Укр. мова_Teach_4,Укр. мова,2-Б,3,12,1,whole,standard
+Укр. мова_Teach_4,Укр. мова,2-Б,3,25,1,whole,standard
 Англ. мова_Teach_4,Англ. мова,2-Б,3,25,1,1,standard
 Англ. мова_Teach_4,Англ. мова,2-Б,3,25,1,2,standard
-Фізична культура_Teach_4,Фізична культура,2-Б,3,25,1,whole,gym
-Математика_Teach_3,Математика,2-В,4,25,1,whole,standard
+Фізична культура_Teach_4,Фізична культура,2-Б,3,18,1,whole,gym
+Математика_Teach_3,Математика,2-В,4,18,1,whole,standard
 Укр. мова_Teach_3,Укр. мова,2-В,3,18,1,whole,standard
 Англ. мова_Teach_3,Англ. мова,2-В,3,18,1,1,standard
 Англ. мова_Teach_3,Англ. мова,2-В,3,18,1,2,standard
 Фізична культура_Teach_3,Фізична культура,2-В,3,18,1,whole,gym
-Математика_Teach_2,Математика,2-Г,4,25,1,whole,standard
+Математика_Teach_2,Математика,2-Г,4,12,1,whole,standard
 Укр. мова_Teach_2,Укр. мова,2-Г,3,18,1,whole,standard
-Англ. мова_Teach_2,Англ. мова,2-Г,3,12,1,1,standard
-Англ. мова_Teach_2,Англ. мова,2-Г,3,12,1,2,standard
-Фізична культура_Teach_2,Фізична культура,2-Г,3,18,1,whole,gym
+Англ. мова_Teach_2,Англ. мова,2-Г,3,25,1,1,standard
+Англ. мова_Teach_2,Англ. мова,2-Г,3,25,1,2,standard
+Фізична культура_Teach_2,Фізична культура,2-Г,3,25,1,whole,gym
 Математика_Teach_1,Математика,2-Д,4,12,1,whole,standard
-Укр. мова_Teach_1,Укр. мова,2-Д,3,18,1,whole,standard
-Англ. мова_Teach_1,Англ. мова,2-Д,3,18,1,1,standard
-Англ. мова_Teach_1,Англ. мова,2-Д,3,18,1,2,standard
-Фізична культура_Teach_1,Фізична культура,2-Д,3,25,1,whole,gym
+Укр. мова_Teach_1,Укр. мова,2-Д,3,12,1,whole,standard
+Англ. мова_Teach_1,Англ. мова,2-Д,3,25,1,1,standard
+Англ. мова_Teach_1,Англ. мова,2-Д,3,25,1,2,standard
+Фізична культура_Teach_1,Фізична культура,2-Д,3,18,1,whole,gym
 Математика_Teach_1,Математика,3-А,4,12,1,whole,standard
-Укр. мова_Teach_1,Укр. мова,3-А,3,18,1,whole,standard
-Англ. мова_Teach_1,Англ. мова,3-А,3,18,1,1,standard
-Англ. мова_Teach_1,Англ. мова,3-А,3,18,1,2,standard
-Фізична культура_Teach_1,Фізична культура,3-А,3,25,1,whole,gym
-Математика_Teach_2,Математика,3-Б,4,25,1,whole,standard
+Укр. мова_Teach_1,Укр. мова,3-А,3,12,1,whole,standard
+Англ. мова_Teach_1,Англ. мова,3-А,3,25,1,1,standard
+Англ. мова_Teach_1,Англ. мова,3-А,3,25,1,2,standard
+Фізична культура_Teach_1,Фізична культура,3-А,3,18,1,whole,gym
+Математика_Teach_2,Математика,3-Б,4,12,1,whole,standard
 Укр. мова_Teach_2,Укр. мова,3-Б,3,18,1,whole,standard
-Англ. мова_Teach_3,Англ. мова,3-Б,3,18,1,1,standard
-Англ. мова_Teach_3,Англ. мова,3-Б,3,18,1,2,standard
-Фізична культура_Teach_2,Фізична культура,3-Б,3,18,1,whole,gym
-Математика_Teach_3,Математика,3-В,4,25,1,whole,standard
+Англ. мова_Teach_2,Англ. мова,3-Б,3,25,1,1,standard
+Англ. мова_Teach_2,Англ. мова,3-Б,3,25,1,2,standard
+Фізична культура_Teach_2,Фізична культура,3-Б,3,25,1,whole,gym
+Математика_Teach_3,Математика,3-В,4,18,1,whole,standard
 Укр. мова_Teach_3,Укр. мова,3-В,3,18,1,whole,standard
-Англ. мова_Teach_4,Англ. мова,3-В,3,25,1,1,standard
-Англ. мова_Teach_4,Англ. мова,3-В,3,25,1,2,standard
+Англ. мова_Teach_3,Англ. мова,3-В,3,18,1,1,standard
+Англ. мова_Teach_3,Англ. мова,3-В,3,18,1,2,standard
 Фізична культура_Teach_3,Фізична культура,3-В,3,18,1,whole,gym
 Математика_Teach_4,Математика,3-Г,4,18,1,whole,standard
-Укр. мова_Teach_4,Укр. мова,3-Г,3,12,1,whole,standard
+Укр. мова_Teach_4,Укр. мова,3-Г,3,25,1,whole,standard
 Англ. мова_Teach_4,Англ. мова,3-Г,3,25,1,1,standard
 Англ. мова_Teach_4,Англ. мова,3-Г,3,25,1,2,standard
-Фізична культура_Teach_4,Фізична культура,3-Г,3,25,1,whole,gym
-Математика_Teach_5,Математика,3-Д,4,12,1,whole,standard
-Укр. мова_Teach_5,Укр. мова,3-Д,3,18,1,whole,standard
-Auto,Англ. мова,3-Д,3,,1,1,standard
-Auto,Англ. мова,3-Д,3,,1,2,standard
+Фізична культура_Teach_4,Фізична культура,3-Г,3,18,1,whole,gym
+Математика_Teach_5,Математика,3-Д,4,25,1,whole,standard
+Укр. мова_Teach_5,Укр. мова,3-Д,3,12,1,whole,standard
+Англ. мова_Teach_4,Англ. мова,3-Д,3,25,1,1,standard
+Англ. мова_Teach_4,Англ. мова,3-Д,3,25,1,2,standard
 Фізична культура_Teach_5,Фізична культура,3-Д,3,12,1,whole,gym
-Математика_Teach_4,Математика,4-А,4,18,1,whole,standard
-Укр. мова_Teach_5,Укр. мова,4-А,3,18,1,whole,standard
-Auto,Англ. мова,4-А,3,,1,1,standard
-Auto,Англ. мова,4-А,3,,1,2,standard
+Математика_Teach_5,Математика,4-А,4,25,1,whole,standard
+Укр. мова_Teach_5,Укр. мова,4-А,3,12,1,whole,standard
+Англ. мова_Teach_2,Англ. мова,4-А,3,25,1,1,standard
+Англ. мова_Teach_2,Англ. мова,4-А,3,25,1,2,standard
 Фізична культура_Teach_5,Фізична культура,4-А,3,12,1,whole,gym
-Математика_Teach_3,Математика,4-Б,4,25,1,whole,standard
-Укр. мова_Teach_4,Укр. мова,4-Б,3,12,1,whole,standard
-Auto,Англ. мова,4-Б,3,,1,1,standard
-Auto,Англ. мова,4-Б,3,,1,2,standard
-Фізична культура_Teach_4,Фізична культура,4-Б,3,25,1,whole,gym
-Математика_Teach_2,Математика,4-В,4,25,1,whole,standard
+Математика_Teach_4,Математика,4-Б,4,18,1,whole,standard
+Укр. мова_Teach_4,Укр. мова,4-Б,3,25,1,whole,standard
+Англ. мова_Teach_1,Англ. мова,4-Б,3,25,1,1,standard
+Англ. мова_Teach_1,Англ. мова,4-Б,3,25,1,2,standard
+Фізична культура_Teach_4,Фізична культура,4-Б,3,18,1,whole,gym
+Математика_Teach_3,Математика,4-В,4,18,1,whole,standard
 Укр. мова_Teach_3,Укр. мова,4-В,3,18,1,whole,standard
 Auto,Англ. мова,4-В,3,,1,1,standard
 Auto,Англ. мова,4-В,3,,1,2,standard
 Фізична культура_Teach_3,Фізична культура,4-В,3,18,1,whole,gym
-Математика_Teach_2,Математика,4-Г,4,25,1,whole,standard
+Математика_Teach_5,Математика,4-Г,4,25,1,whole,standard
 Укр. мова_Teach_2,Укр. мова,4-Г,3,18,1,whole,standard
 Auto,Англ. мова,4-Г,3,,1,1,standard
 Auto,Англ. мова,4-Г,3,,1,2,standard
-Фізична культура_Teach_2,Фізична культура,4-Г,3,18,1,whole,gym
-Математика_Teach_3,Математика,4-Д,4,25,1,whole,standard
-Укр. мова_Teach_1,Укр. мова,4-Д,3,18,1,whole,standard
+Фізична культура_Teach_2,Фізична культура,4-Г,3,25,1,whole,gym
+Математика_Teach_5,Математика,4-Д,4,25,1,whole,standard
+Укр. мова_Teach_1,Укр. мова,4-Д,3,12,1,whole,standard
 Auto,Англ. мова,4-Д,3,,1,1,standard
 Auto,Англ. мова,4-Д,3,,1,2,standard
-Фізична культура_Teach_1,Фізична культура,4-Д,3,25,1,whole,gym
-Математика_Teach_3,Математика,5-А,4,25,1,whole,standard
-Укр. мова_Teach_1,Укр. мова,5-А,3,18,1,whole,standard
+Фізична культура_Teach_1,Фізична культура,4-Д,3,18,1,whole,gym
+Auto,Математика,5-А,4,,1,whole,standard
+Укр. мова_Teach_2,Укр. мова,5-А,3,18,1,whole,standard
 Auto,Англ. мова,5-А,3,,1,1,standard
 Auto,Англ. мова,5-А,3,,1,2,standard
-Фізична культура_Teach_1,Фізична культура,5-А,3,25,1,whole,gym
-Математика_Teach_2,Математика,5-Б,4,25,1,whole,standard
-Укр. мова_Teach_2,Укр. мова,5-Б,3,18,1,whole,standard
+Фізична культура_Teach_1,Фізична культура,5-А,3,18,1,whole,gym
+Auto,Математика,5-Б,4,,1,whole,standard
+Укр. мова_Teach_3,Укр. мова,5-Б,3,18,1,whole,standard
 Auto,Англ. мова,5-Б,3,,1,1,standard
 Auto,Англ. мова,5-Б,3,,1,2,standard
-Фізична культура_Teach_2,Фізична культура,5-Б,3,18,1,whole,gym
+Фізична культура_Teach_2,Фізична культура,5-Б,3,25,1,whole,gym
 Auto,Математика,5-В,4,,1,whole,standard
-Укр. мова_Teach_3,Укр. мова,5-В,3,18,1,whole,standard
+Укр. мова_Teach_4,Укр. мова,5-В,3,25,1,whole,standard
 Auto,Англ. мова,5-В,3,,1,1,standard
 Auto,Англ. мова,5-В,3,,1,2,standard
 Фізична культура_Teach_3,Фізична культура,5-В,3,18,1,whole,gym
 Auto,Математика,5-Г,4,,1,whole,standard
-Укр. мова_Teach_5,Укр. мова,5-Г,3,18,1,whole,standard
+Укр. мова_Teach_4,Укр. мова,5-Г,3,25,1,whole,standard
 Auto,Англ. мова,5-Г,3,,1,1,standard
 Auto,Англ. мова,5-Г,3,,1,2,standard
-Фізична культура_Teach_4,Фізична культура,5-Г,3,25,1,whole,gym
+Фізична культура_Teach_4,Фізична культура,5-Г,3,18,1,whole,gym
 Auto,Математика,5-Д,4,,1,whole,standard
-Укр. мова_Teach_5,Укр. мова,5-Д,3,18,1,whole,standard
+Укр. мова_Teach_3,Укр. мова,5-Д,3,18,1,whole,standard
 Auto,Англ. мова,5-Д,3,,1,1,standard
 Auto,Англ. мова,5-Д,3,,1,2,standard
-Фізична культура_Teach_4,Фізична культура,5-Д,3,25,1,whole,gym
+Фізична культура_Teach_4,Фізична культура,5-Д,3,18,1,whole,gym
 Auto,Математика,6-А,4,,2,whole,standard
-Укр. мова_Teach_3,Укр. мова,6-А,3,18,2,whole,standard
+Укр. мова_Teach_2,Укр. мова,6-А,3,18,2,whole,standard
 Auto,Англ. мова,6-А,3,,2,1,standard
 Auto,Англ. мова,6-А,3,,2,2,standard
 Фізична культура_Teach_3,Фізична культура,6-А,3,18,2,whole,gym
 Auto,Математика,6-Б,4,,2,whole,standard
-Укр. мова_Teach_2,Укр. мова,6-Б,3,18,2,whole,standard
+Укр. мова_Teach_4,Укр. мова,6-Б,3,25,2,whole,standard
 Auto,Англ. мова,6-Б,3,,2,1,standard
 Auto,Англ. мова,6-Б,3,,2,2,standard
-Фізична культура_Teach_2,Фізична культура,6-Б,3,18,2,whole,gym
+Фізична культура_Teach_2,Фізична культура,6-Б,3,25,2,whole,gym
 Auto,Математика,6-В,4,,2,whole,standard
-Укр. мова_Teach_1,Укр. мова,6-В,3,18,2,whole,standard
+Укр. мова_Teach_4,Укр. мова,6-В,3,25,2,whole,standard
 Auto,Англ. мова,6-В,3,,2,1,standard
 Auto,Англ. мова,6-В,3,,2,2,standard
-Фізична культура_Teach_1,Фізична культура,6-В,3,25,2,whole,gym
+Фізична культура_Teach_1,Фізична культура,6-В,3,18,2,whole,gym
 Auto,Математика,6-Г,4,,2,whole,standard
 Auto,Укр. мова,6-Г,3,,2,whole,standard
 Auto,Англ. мова,6-Г,3,,2,1,standard
 Auto,Англ. мова,6-Г,3,,2,2,standard
-Фізична культура_Teach_1,Фізична культура,6-Г,3,25,2,whole,gym
+Фізична культура_Teach_2,Фізична культура,6-Г,3,25,2,whole,gym
 Auto,Математика,6-Д,4,,2,whole,standard
 Auto,Укр. мова,6-Д,3,,2,whole,standard
 Auto,Англ. мова,6-Д,3,,2,1,standard
 Auto,Англ. мова,6-Д,3,,2,2,standard
-Фізична культура_Teach_4,Фізична культура,6-Д,3,25,2,whole,gym
+Фізична культура_Teach_2,Фізична культура,6-Д,3,25,2,whole,gym
 Auto,Математика,7-А,4,,2,whole,standard
 Auto,Укр. мова,7-А,3,,2,whole,standard
 Auto,Англ. мова,7-А,3,,2,1,standard
 Auto,Англ. мова,7-А,3,,2,2,standard
-Фізика_Teach_1,Фізика,7-А,2,18,2,whole,physics
-Фізична культура_Teach_4,Фізична культура,7-А,3,25,2,whole,gym
+Фізика_Teach_1,Фізика,7-А,2,12,2,whole,physics
+Auto,Фізична культура,7-А,3,,2,whole,gym
 Auto,Математика,7-Б,4,,2,whole,standard
 Auto,Укр. мова,7-Б,3,,2,whole,standard
 Auto,Англ. мова,7-Б,3,,2,1,standard
 Auto,Англ. мова,7-Б,3,,2,2,standard
 Фізика_Teach_2,Фізика,7-Б,2,25,2,whole,physics
-Фізична культура_Teach_1,Фізична культура,7-Б,3,25,2,whole,gym
+Auto,Фізична культура,7-Б,3,,2,whole,gym
 Auto,Математика,7-В,4,,2,whole,standard
 Auto,Укр. мова,7-В,3,,2,whole,standard
 Auto,Англ. мова,7-В,3,,2,1,standard
@@ -177,13 +177,13 @@ Auto,Математика,7-Д,4,,2,whole,standard
 Auto,Укр. мова,7-Д,3,,2,whole,standard
 Auto,Англ. мова,7-Д,3,,2,1,standard
 Auto,Англ. мова,7-Д,3,,2,2,standard
-Фізика_Teach_5,Фізика,7-Д,2,12,2,whole,physics
+Фізика_Teach_5,Фізика,7-Д,2,18,2,whole,physics
 Auto,Фізична культура,7-Д,3,,2,whole,gym
 Auto,Математика,8-А,4,,2,whole,standard
 Auto,Укр. мова,8-А,3,,2,whole,standard
 Auto,Англ. мова,8-А,3,,2,1,standard
 Auto,Англ. мова,8-А,3,,2,2,standard
-Фізика_Teach_5,Фізика,8-А,2,12,2,whole,physics
+Фізика_Teach_5,Фізика,8-А,2,18,2,whole,physics
 Auto,Фізична культура,8-А,3,,2,whole,gym
 Auto,Математика,8-Б,4,,2,whole,standard
 Auto,Укр. мова,8-Б,3,,2,whole,standard
@@ -207,13 +207,13 @@ Auto,Математика,8-Д,4,,2,whole,standard
 Auto,Укр. мова,8-Д,3,,2,whole,standard
 Auto,Англ. мова,8-Д,3,,2,1,standard
 Auto,Англ. мова,8-Д,3,,2,2,standard
-Фізика_Teach_1,Фізика,8-Д,2,18,2,whole,physics
+Фізика_Teach_1,Фізика,8-Д,2,12,2,whole,physics
 Auto,Фізична культура,8-Д,3,,2,whole,gym
 Auto,Математика,9-А,4,,2,whole,standard
 Auto,Укр. мова,9-А,3,,2,whole,standard
 Auto,Англ. мова,9-А,3,,2,1,standard
 Auto,Англ. мова,9-А,3,,2,2,standard
-Фізика_Teach_1,Фізика,9-А,2,18,2,whole,physics
+Фізика_Teach_1,Фізика,9-А,2,12,2,whole,physics
 Auto,Фізична культура,9-А,3,,2,whole,gym
 Auto,Математика,9-Б,4,,2,whole,standard
 Auto,Укр. мова,9-Б,3,,2,whole,standard
@@ -237,13 +237,13 @@ Auto,Математика,9-Д,4,,2,whole,standard
 Auto,Укр. мова,9-Д,3,,2,whole,standard
 Auto,Англ. мова,9-Д,3,,2,1,standard
 Auto,Англ. мова,9-Д,3,,2,2,standard
-Фізика_Teach_5,Фізика,9-Д,2,12,2,whole,physics
+Фізика_Teach_5,Фізика,9-Д,2,18,2,whole,physics
 Auto,Фізична культура,9-Д,3,,2,whole,gym
 Auto,Математика,10-А,4,,1,whole,standard
 Auto,Укр. мова,10-А,3,,1,whole,standard
 Auto,Англ. мова,10-А,3,,1,1,standard
 Auto,Англ. мова,10-А,3,,1,2,standard
-Фізика_Teach_5,Фізика,10-А,2,12,1,whole,physics
+Фізика_Teach_5,Фізика,10-А,2,18,1,whole,physics
 Auto,Фізична культура,10-А,3,,1,whole,gym
 Auto,Математика,10-Б,4,,1,whole,standard
 Auto,Укр. мова,10-Б,3,,1,whole,standard
@@ -267,13 +267,13 @@ Auto,Математика,10-Д,4,,1,whole,standard
 Auto,Укр. мова,10-Д,3,,1,whole,standard
 Auto,Англ. мова,10-Д,3,,1,1,standard
 Auto,Англ. мова,10-Д,3,,1,2,standard
-Фізика_Teach_1,Фізика,10-Д,2,18,1,whole,physics
+Фізика_Teach_1,Фізика,10-Д,2,12,1,whole,physics
 Auto,Фізична культура,10-Д,3,,1,whole,gym
 Auto,Математика,11-А,4,,1,whole,standard
 Auto,Укр. мова,11-А,3,,1,whole,standard
 Auto,Англ. мова,11-А,3,,1,1,standard
 Auto,Англ. мова,11-А,3,,1,2,standard
-Фізика_Teach_1,Фізика,11-А,2,18,1,whole,physics
+Фізика_Teach_1,Фізика,11-А,2,12,1,whole,physics
 Auto,Фізична культура,11-А,3,,1,whole,gym
 Auto,Математика,11-Б,4,,1,whole,standard
 Auto,Укр. мова,11-Б,3,,1,whole,standard
@@ -297,5 +297,5 @@ Auto,Математика,11-Д,4,,1,whole,standard
 Auto,Укр. мова,11-Д,3,,1,whole,standard
 Auto,Англ. мова,11-Д,3,,1,1,standard
 Auto,Англ. мова,11-Д,3,,1,2,standard
-Фізика_Teach_5,Фізика,11-Д,2,12,1,whole,physics
+Фізика_Teach_5,Фізика,11-Д,2,18,1,whole,physics
 Auto,Фізична культура,11-Д,3,,1,whole,gym
