@@ -9,9 +9,6 @@ Name,Type,Capacity,Building
 108А,standard,30,А
 109А,standard,30,А
 110А,standard,30,А
-111А,standard,30,А
-112А,standard,30,А
-113А,standard,30,А
 201А,standard,30,А
 202А,standard,30,А
 203А,standard,30,А
@@ -22,9 +19,6 @@ Name,Type,Capacity,Building
 208А,standard,30,А
 209А,standard,30,А
 210А,standard,30,А
-211А,standard,30,А
-212А,standard,30,А
-213А,standard,30,А
 301А,standard,30,А
 302А,standard,30,А
 303А,standard,30,А
@@ -35,30 +29,11 @@ Name,Type,Capacity,Building
 308А,standard,30,А
 309А,standard,30,А
 310А,standard,30,А
-311А,standard,30,А
-312А,standard,30,А
-313А,standard,30,А
-401А,standard,30,А
-402А,standard,30,А
-403А,standard,30,А
-404А,standard,30,А
-405А,standard,30,А
-406А,standard,30,А
-407А,standard,30,А
-408А,standard,30,А
-409А,standard,30,А
-410А,standard,30,А
-411А,standard,30,А
-412А,standard,30,А
-413А,standard,30,А
-Хімія А,chemistry,30,А
-Фізика А,physics,30,А
-Біологія А,bio,30,А
+Хімія-А,chemistry,30,А
+Фізика-А,physics,30,А
+Біологія-А,bio,30,А
 IT-1А,it,15,А
 IT-2А,it,15,А
-IT-3А,it,15,А
-IT-4А,it,15,А
-IT-5А,it,15,А
 101В,standard,30,В
 102В,standard,30,В
 103В,standard,30,В
@@ -69,9 +44,6 @@ IT-5А,it,15,А
 108В,standard,30,В
 109В,standard,30,В
 110В,standard,30,В
-111В,standard,30,В
-112В,standard,30,В
-113В,standard,30,В
 201В,standard,30,В
 202В,standard,30,В
 203В,standard,30,В
@@ -82,9 +54,6 @@ IT-5А,it,15,А
 208В,standard,30,В
 209В,standard,30,В
 210В,standard,30,В
-211В,standard,30,В
-212В,standard,30,В
-213В,standard,30,В
 301В,standard,30,В
 302В,standard,30,В
 303В,standard,30,В
@@ -95,39 +64,12 @@ IT-5А,it,15,А
 308В,standard,30,В
 309В,standard,30,В
 310В,standard,30,В
-311В,standard,30,В
-312В,standard,30,В
-313В,standard,30,В
-401В,standard,30,В
-402В,standard,30,В
-403В,standard,30,В
-404В,standard,30,В
-405В,standard,30,В
-406В,standard,30,В
-407В,standard,30,В
-408В,standard,30,В
-409В,standard,30,В
-410В,standard,30,В
-411В,standard,30,В
-412В,standard,30,В
-413В,standard,30,В
-Хімія В,chemistry,30,В
-Фізика В,physics,30,В
-Біологія В,bio,30,В
+Хімія-В,chemistry,30,В
+Фізика-В,physics,30,В
+Біологія-В,bio,30,В
 IT-1В,it,15,В
 IT-2В,it,15,В
-IT-3В,it,15,В
-IT-4В,it,15,В
-IT-5В,it,15,В
-Спортзал 1-А,gym,30,Sport
-Спортзал 1-Б,gym,30,Sport
-Спортзал 1-В,gym,30,Sport
-Спортзал 2-А,gym,30,Sport
-Спортзал 2-Б,gym,30,Sport
-Спортзал 2-В,gym,30,Sport
-Спортзал 3-А,gym,30,Sport
-Спортзал 3-Б,gym,30,Sport
-Спортзал 3-В,gym,30,Sport
-Спортзал 4-А,gym,30,Sport
-Спортзал 4-Б,gym,30,Sport
-Спортзал 4-В,gym,30,Sport
+Спортзал 1,gym,40,Sport
+Спортзал 2,gym,40,Sport
+Спортзал 3,gym,40,Sport
+Спортзал 4,gym,40,Sport

@@ -5,120 +5,181 @@
     <title>{{ title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
+        body {
+            background-color: #eef2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-        /* Сетка расписания */
+        /* --- НАВИГАЦИЯ --- */
+        .navbar { background: #2c3e50 !important; height: 50px; flex-shrink: 0; }
+        .navbar-brand { font-size: 1rem; font-weight: bold; }
+        .nav-link { font-size: 0.9rem; }
+
+        /* --- КОНТЕЙНЕР ЛИСТА --- */
+        .schedule-wrapper {
+            flex: 1;
+            overflow: auto; /* Скролл страницы */
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .paper-sheet {
+            width: 85%; /* Оптимальная ширина */
+            max-width: 1600px;
+            min-width: 900px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden; /* Чтобы углы были круглыми */
+        }
+
+        /* --- ТАБЛИЦА --- */
         .timetable {
             width: 100%;
-            table-layout: fixed;
             border-collapse: collapse;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            table-layout: fixed; /* ГЛАВНОЕ: Фиксированные колонки */
         }
 
         .timetable th {
-            background-color: #343a40;
-            color: white;
+            background-color: #34495e;
+            color: #ecf0f1;
+            padding: 8px;
             text-align: center;
-            padding: 10px;
-            width: 18%;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border-right: 1px solid #4e6072;
+            height: 40px;
         }
 
-        .col-num { width: 5% !important; background: #e9ecef; color: #495057; text-align: center; font-weight: bold; }
+        .col-num { width: 40px; background: #dfe6e9; color: #636e72; border-right: 1px solid #b2bec3; font-weight: bold; text-align: center;}
 
+        /* --- ЯЧЕЙКА --- */
         .timetable td {
-            border: 1px solid #dee2e6;
-            height: 100px;
+            border: 1px solid #dfe6e9;
+            height: 90px; /* СТРОГАЯ ВЫСОТА ЯЧЕЙКИ */
+            padding: 0;
             vertical-align: top;
-            padding: 5px;
-            font-size: 0.9rem;
+            overflow: hidden; /* Обрезаем, если что-то торчит */
         }
 
-        .lesson {
+        /* ВНУТРЕННИЙ КОНТЕЙНЕР ЯЧЕЙКИ (Скролл тут) */
+        .cell-content {
+            height: 100%;
+            width: 100%;
+            overflow-y: auto; /* Если уроков много - скролл */
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 2px;
+        }
+
+        /* Тонкий скроллбар */
+        .cell-content::-webkit-scrollbar { width: 4px; }
+        .cell-content::-webkit-scrollbar-thumb { background-color: #bdc3c7; border-radius: 2px; }
+
+        /* --- КАРТОЧКА УРОКА --- */
+        .lesson-block {
+            flex-shrink: 0; /* Не сжимать */
+            min-height: 84px; /* Занимает почти всю ячейку по умолчанию */
             background-color: #e3f2fd;
             border-left: 4px solid #2196f3;
-            padding: 4px;
-            margin-bottom: 4px;
-            border-radius: 4px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            padding: 4px 6px;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: background 0.1s;
         }
 
-        .lesson-group { font-weight: bold; display: block; font-size: 1.05em;}
-        .lesson-room { float: right; font-weight: bold; color: #d32f2f; background: #fff; padding: 0 4px; border-radius: 3px; font-size: 0.9em;}
-        .lesson-subject { font-size: 0.9em; color: #555; display: block; margin-top: 2px;}
-        .lesson-teacher { font-style: italic; font-size: 0.85em; color: #666; display: block;}
+        /* Если в клетке много уроков (вакансия), делаем их компактнее */
+        .cell-content:has(> .lesson-block:nth-child(2)) .lesson-block {
+            min-height: 40px; /* Уменьшаем высоту */
+            justify-content: center;
+        }
 
-        .sub-1 { border-left-color: #ff9800; background-color: #fff3e0; }
-        .sub-2 { border-left-color: #4caf50; background-color: #e8f5e9; }
+        .lesson-header { display: flex; justify-content: space-between; font-weight: 700; color: #2c3e50; }
+        .lesson-body { font-size: 0.8rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .room-badge {
+            background: white;
+            padding: 0 4px;
+            border-radius: 3px;
+            color: #c0392b;
+            font-weight: bold;
+            font-size: 0.75rem;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+
+        /* Цвета */
+        .sub-1 { background-color: #fff3e0; border-left-color: #f39c12; }
+        .sub-2 { background-color: #e8f5e9; border-left-color: #27ae60; }
+
+        .empty-text { color: #ecf0f1; font-size: 2rem; text-align: center; margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 sticky-top">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container-fluid px-4">
     <a class="navbar-brand" href="/">📅 Лицей</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navContent">
+    <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto">
-
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle active" href="#" id="teacherDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            👨‍🏫 Выбрать учителя
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="teacherDropdown" style="max-height: 400px; overflow-y: auto;">
+          <a class="nav-link dropdown-toggle active" href="#" id="tDrop" role="button" data-bs-toggle="dropdown">👨‍🏫 Учителя</a>
+          <ul class="dropdown-menu" aria-labelledby="tDrop" style="max-height: 80vh; overflow-y: auto;">
             {% for t in all_teachers %}
             <li><a class="dropdown-item" href="/teacher/{{ t.id }}">{{ t.name }}</a></li>
             {% endfor %}
           </ul>
         </li>
-
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="groupDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            🎓 Выбрать класс
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="groupDropdown" style="max-height: 400px; overflow-y: auto;">
+          <a class="nav-link dropdown-toggle" href="#" id="gDrop" role="button" data-bs-toggle="dropdown">🎓 Классы</a>
+          <ul class="dropdown-menu" aria-labelledby="gDrop" style="max-height: 80vh; overflow-y: auto;">
             {% for g in all_groups %}
             <li><a class="dropdown-item" href="/group/{{ g.id }}">{{ g.name }}</a></li>
             {% endfor %}
           </ul>
         </li>
       </ul>
-
-      <div class="d-flex">
-          <a href="/import" class="btn btn-outline-light btn-sm me-2">⚙️ Настройки</a>
-          <a href="/check" class="btn btn-outline-warning btn-sm me-2">🔍 Диагностика</a>
+      <div class="d-flex gap-2">
+          <a href="/import" class="btn btn-outline-light btn-sm">⚙️</a>
           <form action="/generate" method="post" class="mb-0">
-             <button class="btn btn-success btn-sm" type="submit">⚡ Пересоздать</button>
+             <button class="btn btn-success btn-sm" type="submit">⚡ Генерация</button>
           </form>
       </div>
     </div>
   </div>
 </nav>
 
-<div class="container-fluid px-4">
-    <h3 class="text-center mb-4">{{ title }}</h3>
-
+<div class="schedule-wrapper">
     {% if not schedule_grid %}
-        <div class="alert alert-primary text-center p-5">
-            <h4>👋 Расписание готово!</h4>
-            <p class="lead">В базе найдено {{ all_teachers|length }} учителей и {{ all_groups|length }} классов.</p>
-            <p>Чтобы увидеть расписание, <b>выберите учителя или класс</b> в меню сверху (черная полоса).</p>
+        <div class="text-center mt-5 text-muted">
+            <h3>👈 Выберите расписание в меню сверху</h3>
         </div>
     {% else %}
 
-    <div class="table-responsive">
+    <div class="paper-sheet">
+        <div class="p-2 border-bottom bg-light d-flex justify-content-between align-items-center">
+            <h6 class="m-0 text-dark fw-bold px-3">{{ title }}</h6>
+            <small class="text-muted px-3">13 уроков</small>
+        </div>
+
         <table class="timetable">
             <thead>
                 <tr>
                     <th class="col-num">#</th>
-                    <th>Понедельник</th>
-                    <th>Вторник</th>
-                    <th>Среда</th>
-                    <th>Четверг</th>
-                    <th>Пятница</th>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
                 </tr>
             </thead>
             <tbody>
@@ -127,23 +188,24 @@
                     <td class="col-num">{{ period }}</td>
                     {% for day in range(1, 6) %}
                     <td>
-                        {% set lessons = schedule_grid.get((day, period), []) %}
+                        <div class="cell-content">
+                            {% set lessons = schedule_grid.get((day, period), []) %}
 
-                        {% for lesson in lessons %}
-                        <div class="lesson {% if '(Гр. 1)' in lesson.subject %}sub-1{% elif '(Гр. 2)' in lesson.subject %}sub-2{% endif %}">
-                            <span class="lesson-room">{{ lesson.room }}</span>
-
-                            {% if show_group_name %}
-                                <span class="lesson-group">{{ lesson.group }}</span>
-                            {% endif %}
-
-                            {% if show_teacher_name %}
-                                <span class="lesson-group">{{ lesson.teacher }}</span>
-                            {% endif %}
-
-                            <span class="lesson-subject">{{ lesson.subject }}</span>
+                            {% for lesson in lessons %}
+                            <div class="lesson-block {% if '(Гр. 1)' in lesson.subject %}sub-1{% elif '(Гр. 2)' in lesson.subject %}sub-2{% endif %}">
+                                <div class="lesson-header">
+                                    <span>
+                                        {% if show_group_name %}{{ lesson.group }}{% endif %}
+                                        {% if show_teacher_name %}{{ lesson.teacher }}{% endif %}
+                                    </span>
+                                    <span class="room-badge">{{ lesson.room }}</span>
+                                </div>
+                                <div class="lesson-body">
+                                    {{ lesson.subject }}
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </td>
                     {% endfor %}
                 </tr>
@@ -155,6 +217,5 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

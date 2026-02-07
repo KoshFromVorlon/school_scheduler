@@ -73,23 +73,70 @@ def create_app(config_class=Config):
             })
         return grid
 
-    # === ГЛОБАЛЬНОЕ МЕНЮ (С ОТЛАДКОЙ) ===
+    # === УМНОЕ МЕНЮ (НАТУРАЛЬНАЯ СОРТИРОВКА) ===
     @app.context_processor
     def inject_menus():
         try:
-            teachers = Teacher.query.order_by(Teacher.name).all()
-            groups = StudentGroup.query.order_by(StudentGroup.name).all()
-            # ПЕЧАТАЕМ В КОНСОЛЬ, ЧТОБЫ ТЫ ВИДЕЛ
-            print(f"--- DEBUG MENU: Найдено {len(teachers)} учителей и {len(groups)} классов ---")
+            # 1. ПОЛУЧАЕМ ДАННЫЕ
+            teachers = Teacher.query.all()
+            groups = StudentGroup.query.all()
+
+            # 2. СОРТИРОВКА УЧИТЕЛЕЙ (1, 2, 10 + Вакансии в конце)
+            def teacher_sort_key(t):
+                name = t.name.strip()
+                lower_name = name.lower()
+
+                # А. ОПРЕДЕЛЯЕМ ПРЕДМЕТ (Группировка)
+                subject = name
+                is_vacancy = 0  # 0 = Учитель (сверху), 1 = Вакансия (снизу)
+
+                if t.is_vacancy or "вакансия" in lower_name:
+                    is_vacancy = 1
+                    if "(" in name and ")" in name:
+                        start = name.find('(') + 1
+                        end = name.find(')')
+                        subject = name[start:end].strip()
+                    else:
+                        subject = name
+                elif "_" in name:
+                    subject = name.split('_')[0].strip()
+
+                # Б. ИЗВЛЕКАЕМ НОМЕР (Для Teach_1, Teach_2, Teach_10)
+                number = 0
+                parts = name.split('_')
+                if len(parts) > 1 and parts[-1].isdigit():
+                    number = int(parts[-1])  # Превращаем "10" в число 10
+
+                # В. КЛЮЧ СОРТИРОВКИ:
+                # 1. Предмет (Английский вместе)
+                # 2. Вакансия? (Люди выше вакансий)
+                # 3. Номер (2 < 10)
+                # 4. Имя (на случай если номеров нет)
+                return (subject.lower(), is_vacancy, number, name)
+
+            teachers.sort(key=teacher_sort_key)
+
+            # 3. СОРТИРОВКА КЛАССОВ (1, 2 ... 10, 11)
+            def group_sort_key(g):
+                try:
+                    parts = g.name.split('-')
+                    if len(parts) >= 2 and parts[0].isdigit():
+                        return (int(parts[0]), parts[1])
+                    if g.name.isdigit(): return (int(g.name), "")
+                    return (999, g.name)
+                except:
+                    return (999, g.name)
+
+            groups.sort(key=group_sort_key)
+
             return dict(all_teachers=teachers, all_groups=groups)
         except Exception as e:
             print(f"!!! ОШИБКА В МЕНЮ: {e}")
             return dict(all_teachers=[], all_groups=[])
 
-    # === НОВЫЙ МАРШРУТ ДЛЯ ПРОВЕРКИ БАЗЫ ===
+    # === ДИАГНОСТИКА ===
     @app.route('/check')
     def check_db():
-        """Техническая страница, чтобы увидеть содержимое базы без красоты."""
         t_count = Teacher.query.count()
         g_count = StudentGroup.query.count()
         r_count = Room.query.count()
@@ -152,11 +199,10 @@ def create_app(config_class=Config):
                     msg = f"Инфраструктура: загружено {count} помещений."
                 elif import_type == 'workload':
                     count = import_data_from_file(filepath)
-                    msg = f"Нагрузка: загружено {count} записей. (Проверьте /check)"
+                    msg = f"Нагрузка: загружено {count} записей."
 
                 return render_template('import_success.html', message=msg)
             except Exception as e:
-                # ВАЖНО: Выводим ошибку на экран
                 return f"<h1>ОШИБКА ИМПОРТА:</h1><p>{str(e)}</p>", 500
         return render_template('import.html')
 
