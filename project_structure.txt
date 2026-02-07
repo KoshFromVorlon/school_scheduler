@@ -1,0 +1,58 @@
+📂 Project Structure: school_scheduler/
+├── .github/
+│   └── workflows/
+│       └── ci_cd.yml
+├── infra/
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── entrypoint.sh
+├── migrations/
+│   ├── versions/
+│   │   ├── 4c00f3383278_init_industrial_schema.py
+│   │   └── b3bda1d4b55c_add_buildings.py
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── README
+│   └── script.py.mako
+├── screenshots/
+├── src/
+│   ├── api/
+│   │   └── debug.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── enums.py
+│   │   ├── schedule.py
+│   │   └── school.py
+│   ├── solver/
+│   │   └── engine.py
+│   ├── tasks/
+│   ├── templates/
+│   │   ├── import.html
+│   │   ├── import_success.html
+│   │   └── schedule.html
+│   ├── utils/
+│   │   ├── importer.py
+│   │   └── ministry_norms.py
+│   ├── __init__.py
+│   ├── app.py
+│   ├── commands.py
+│   ├── config.py
+│   └── extensions.py
+├── tests/
+├── uploads/
+│   ├── loads.csv
+│   ├── rooms.csv
+│   └── workload.csv
+├── .dockerignore
+├── .env
+├── .gitignore
+├── generate_balanced.py
+├── generate_full_school.py
+├── generate_test_data.py
+├── generate_tree.py
+├── project_structure.txt
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+├── rooms.csv
+└── workload.csv
