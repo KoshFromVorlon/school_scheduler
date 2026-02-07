@@ -18,6 +18,12 @@ class Teacher(db.Model):
     __tablename__ = 'teachers'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
+
+    # === НОВЫЕ ПОЛЯ ===
+    max_hours: Mapped[int] = mapped_column(default=18)  # Лимит нагрузки (ставка 18)
+    is_vacancy: Mapped[bool] = mapped_column(default=False)  # True = Это виртуальная вакансия
+    # ==================
+
     school_id: Mapped[int] = mapped_column(ForeignKey('schools.id'), nullable=False)
     school = relationship('School', back_populates='teachers')
     constraints: Mapped[dict] = mapped_column(db.JSON, nullable=True)
@@ -30,18 +36,12 @@ class Room(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     capacity: Mapped[int] = mapped_column(default=30)
-
-    # НОВОЕ ПОЛЕ: Корпус (например, "A", "B", "Main", "Sport")
-    # По умолчанию пустая строка, если корпусов нет
     building: Mapped[str] = mapped_column(nullable=True, default="")
-
     room_type: Mapped[RoomType] = mapped_column(Enum(RoomType), default=RoomType.STANDARD)
-
     school_id: Mapped[int] = mapped_column(ForeignKey('schools.id'), nullable=False)
     school = relationship('School', back_populates='rooms')
 
-    def __str__(self):
-        return f"{self.name} [{self.room_type.value}]"
+    def __str__(self): return f"{self.name} [{self.room_type.value}]"
 
 
 class Subject(db.Model):

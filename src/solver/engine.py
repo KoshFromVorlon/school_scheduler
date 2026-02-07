@@ -10,140 +10,138 @@ class SchoolScheduler:
         self.model = cp_model.CpModel()
         self.solver = cp_model.CpSolver()
 
-        # Настройки: 8 потоков, 60 секунд макс (задача стала сложнее)
-        self.solver.parameters.max_time_in_seconds = 600.0
+        # Настройки: 2 минуты на поиск (достаточно для хорошего решения)
+        self.solver.parameters.max_time_in_seconds = 120.0
         self.solver.parameters.num_search_workers = 8
         self.solver.parameters.log_search_progress = True
 
-        self.grid = {}
+        self.grid = {}  # (workload_id, slot_id, room_id) -> BoolVar
 
     def run_algorithm(self, workloads, slots, rooms):
-        # Сортируем для детерминизма
-        workloads = sorted(workloads, key=lambda x: x.id)
-        slots = sorted(slots, key=lambda x: (x.day_of_week, x.period_number))
-        rooms = sorted(rooms, key=lambda x: x.id)
+        print(f"🧩 Запуск солвера: {len(workloads)} нагрузок, {len(slots)} слотов, {len(rooms)} кабинетов.")
 
-        # === 1. Создание переменных ===
-        # Создаем переменную ТОЛЬКО если кабинет подходит по типу
+        # Сортировка
+        workloads.sort(key=lambda x: x.id)
+        rooms.sort(key=lambda x: x.id)
+        slots.sort(key=lambda x: (x.day_of_week, x.period_number))
+
+        # Оптимизация: Индекс кабинетов по типу
+        rooms_by_type = {}
+        for r in rooms:
+            rooms_by_type.setdefault(r.room_type, []).append(r)
+
+        # === 1. СОЗДАНИЕ ПЕРЕМЕННЫХ ===
+        lesson_vars = {w.id: [] for w in workloads}
+
+        total_needed = 0
+
         for w in workloads:
+            needed_type = w.required_room_type
+            available_rooms = rooms_by_type.get(needed_type, [])
+
+            # Fallback на обычные кабинеты, если спец. нет (кроме физры)
+            if not available_rooms and needed_type != RoomType.GYM:
+                available_rooms = rooms_by_type.get(RoomType.STANDARD, [])
+
             for s in slots:
-                for r in rooms:
-                    # ЖЕСТКИЙ ФИЛЬТР: Нельзя проводить Физру в Хим.кабинете
-                    if w.required_room_type != r.room_type:
-                        continue
+                # ОПТИМИЗАЦИЯ: Фильтр смен
+                if w.group.shift == 1 and s.period_number > 8: continue  # 1 смена не учится вечером
+                if w.group.shift == 2 and s.period_number < 5: continue  # 2 смена не учится утром
 
-                    name = f'w{w.id}_d{s.day_of_week}_p{s.period_number}_r{r.id}'
-                    self.grid[(w.id, s.id, r.id)] = self.model.NewBoolVar(name)
+                for r in available_rooms:
+                    var = self.model.NewBoolVar(f'w{w.id}_d{s.day_of_week}_p{s.period_number}_r{r.id}')
+                    self.grid[(w.id, s.id, r.id)] = var
+                    lesson_vars[w.id].append(var)
 
-        # === 2. Ограничения ===
+            total_needed += w.hours_per_week
 
-        # А. Выполнить план часов (hours_per_week)
-        for w in workloads:
-            lessons = []
-            for s in slots:
-                for r in rooms:
-                    if (w.id, s.id, r.id) in self.grid:
-                        lessons.append(self.grid[(w.id, s.id, r.id)])
+        print(f"📊 Переменные созданы. Цель: {total_needed} уроков.")
 
-            if lessons:
-                self.model.Add(sum(lessons) == w.hours_per_week)
-            else:
-                print(f"⚠️ ВНИМАНИЕ: Для предмета {w.subject} нет подходящих кабинетов!")
+        # === 2. ОГРАНИЧЕНИЯ ===
 
-        # Б. Учитель: не может вести 2 урока одновременно
-        teacher_workloads = {}
-        for w in workloads:
-            teacher_workloads.setdefault(w.teacher_id, []).append(w)
+        # А. КОНФЛИКТЫ (Hard Constraints)
+        teacher_to_vars = {}
+        room_to_vars = {}
+        group_to_vars = {}  # group_id -> slot_id -> list of vars
 
-        for t_workloads in teacher_workloads.values():
-            for s in slots:
-                concurrent_lessons = []
-                for w in t_workloads:
-                    for r in rooms:
-                        if (w.id, s.id, r.id) in self.grid:
-                            concurrent_lessons.append(self.grid[(w.id, s.id, r.id)])
-                self.model.Add(sum(concurrent_lessons) <= 1)
+        for (wid, sid, rid), var in self.grid.items():
+            w = next(x for x in workloads if x.id == wid)
 
-        # В. Кабинет: только 1 урок одновременно
-        for s in slots:
-            for r in rooms:
-                lessons_in_room = []
-                for w in workloads:
-                    if (w.id, s.id, r.id) in self.grid:
-                        lessons_in_room.append(self.grid[(w.id, s.id, r.id)])
-                self.model.Add(sum(lessons_in_room) <= 1)
+            # Собираем переменные для учителя
+            teacher_to_vars.setdefault((w.teacher_id, sid), []).append(var)
 
-        # Г. ГРУППЫ И ПОДГРУППЫ (Сложная логика)
-        # Группируем нагрузки по Классам (5-А, 8-Б...)
-        group_workloads_map = {}
-        for w in workloads:
-            group_workloads_map.setdefault(w.group_id, []).append(w)
+            # Для кабинета
+            room_to_vars.setdefault((rid, sid), []).append(var)
 
-        for g_id, g_workloads in group_workloads_map.items():
-            for s in slots:
-                # Собираем переменные для этого класса в этот слот
-                # Разделяем их по типу подгруппы
-                vars_whole = []
-                vars_subgroups = {}  # 'group_1': [v1, v2], 'group_2': [v3]
+            # Для класса (сложная логика подгрупп)
+            g_map = group_to_vars.setdefault(w.group_id, {})
+            s_list = g_map.setdefault(sid, [])
+            s_list.append((w.subgroup, var))
 
-                for w in g_workloads:
-                    # Собираем все варианты кабинетов для этой нагрузки
-                    w_lessons = []
-                    for r in rooms:
-                        if (w.id, s.id, r.id) in self.grid:
-                            w_lessons.append(self.grid[(w.id, s.id, r.id)])
+        # 1. Учитель (только если это НЕ ВАКАНСИЯ)
+        # Если учитель "Вакансия", он может вести хоть 100 уроков одновременно
+        for (tid, sid), vars_list in teacher_to_vars.items():
+            # Находим объект учителя (можно оптимизировать кэшем, но тут быстро)
+            # В данном контексте workloads уже содержат teacher, но нам надо найти по ID
+            # Проще проверить: все workloads с этим tid имеют одного учителя
+            sample_w = next(x for x in workloads if x.teacher_id == tid)
 
-                    if not w_lessons: continue
+            if not sample_w.teacher.is_vacancy:
+                self.model.Add(sum(vars_list) <= 1)
 
-                    # Сумма (активен ли урок w в этот слот)
-                    # Обычно w_active - это 0 или 1, так как учитель/кабинет уже ограничены
-                    w_active = sum(w_lessons)
+        # 2. Кабинет (не резиновый)
+        for vars_list in room_to_vars.values():
+            self.model.Add(sum(vars_list) <= 1)
 
-                    if w.subgroup == SubgroupType.WHOLE_CLASS:
-                        vars_whole.append(w_active)
-                    else:
-                        vars_subgroups.setdefault(w.subgroup.value, []).append(w_active)
+        # 3. Класс (Whole vs Subgroups)
+        for gid, slots_map in group_to_vars.items():
+            for sid, tuples in slots_map.items():
+                whole_vars = [v for sub, v in tuples if sub == SubgroupType.WHOLE_CLASS]
+                part_vars = [v for sub, v in tuples if sub != SubgroupType.WHOLE_CLASS]
 
-                # ОГРАНИЧЕНИЕ 1: Если идет урок у ВСЕГО класса, подгруппы отдыхают
-                # И наоборот: Если занята подгруппа, урок для всего класса невозможен
-                # sum(Whole) + sum(AnySubgroup) <= 1
+                sum_whole = sum(whole_vars)
 
-                sum_whole = sum(vars_whole)
-
-                # Проверяем конфликт "Весь класс" vs "Каждая подгруппа"
-                for sub_vars in vars_subgroups.values():
-                    self.model.Add(sum_whole + sum(sub_vars) <= 1)
-
-                # ОГРАНИЧЕНИЕ 2: Одна подгруппа не может быть в двух местах (уже покрыто логикой учителя/кабинета, но на всякий случай)
-                for sub_vars in vars_subgroups.values():
-                    self.model.Add(sum(sub_vars) <= 1)
+                # Если урок у всего класса, подгруппы не могут
+                for pv in part_vars:
+                    self.model.Add(sum_whole + pv <= 1)
 
                 self.model.Add(sum_whole <= 1)
+                # Группы 1 и 2 могут идти одновременно, это ОК.
 
-                # ВАЖНО: Мы НЕ запрещаем Group 1 и Group 2 идти одновременно.
-                # Мы не пишем sum(group1) + sum(group2) <= 1. Это разрешено!
+        # Б. ЦЕЛЬ (Soft Constraints) - BEST EFFORT
+        all_assigned = []
+        for w in workloads:
+            assigned = sum(lesson_vars[w.id])
+            # Нельзя поставить больше часов, чем надо
+            self.model.Add(assigned <= w.hours_per_week)
+            all_assigned.append(assigned)
 
-        # === 3. Решение ===
+        # Максимизируем количество уроков
+        self.model.Maximize(sum(all_assigned))
+
+        # === 3. РЕШЕНИЕ ===
+        print("⏳ Поиск решения...")
         status = self.solver.Solve(self.model)
 
         if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-            print(f"✅ Решение найдено! ({self.solver.WallTime():.2f} сек)")
+            placed = self.solver.ObjectiveValue()
+            print(f"✅ УСПЕХ! Размещено {int(placed)} из {total_needed} уроков.")
             self._save_to_db(workloads, slots, rooms)
             return True
         else:
-            print("💥 Невозможно составить расписание. Конфликт условий.")
+            print("💥 Не удалось найти решение (даже частичное).")
             return False
 
     def _save_to_db(self, workloads, slots, rooms):
         db.session.query(ScheduleEntry).delete()
         new_entries = []
-        for w in workloads:
-            for s in slots:
-                for r in rooms:
-                    if (w.id, s.id, r.id) in self.grid:
-                        if self.solver.Value(self.grid[(w.id, s.id, r.id)]):
-                            new_entries.append(ScheduleEntry(
-                                workload_id=w.id, timeslot_id=s.id, room_id=r.id
-                            ))
+
+        count = 0
+        for (wid, sid, rid), var in self.grid.items():
+            if self.solver.Value(var):
+                new_entries.append(ScheduleEntry(workload_id=wid, timeslot_id=sid, room_id=rid))
+                count += 1
+
         db.session.add_all(new_entries)
         db.session.commit()
+        print(f"💾 Сохранено {count} записей.")
